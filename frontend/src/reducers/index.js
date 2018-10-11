@@ -1,10 +1,15 @@
-import { ActionTypes } from "../constants/action_types.js"
+import Actions from './../actions';
+import { ActionTypes } from './../constants/action_types';
 
 // define the intial state of the application as an empty set of todos, and an empty user
 const initialState = {
     todos: [],
-    user: {},
-    csrfToken: ""
+    user: {
+        username: "",
+        authToken: ""
+    },
+    csrfToken: "",
+    loginError: ""
 }
 
 // defines the base reducer for the store
@@ -34,6 +39,17 @@ export function baseReducer(state = initialState, action)
             return {
                 ...state,
                 csrfToken: action.csrfToken
+            }
+        case ActionTypes.LOGIN_ERROR:
+            return {
+                ...state,
+                loginError: action.error
+            }
+        // handler for successful retrieval of todos
+        case ActionTypes.LOAD_TODOS_SUCCESS:
+            return {
+                ...state,
+                todos: action.todos
             }
         default:
             return state;

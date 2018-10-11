@@ -1,8 +1,18 @@
 // file to hold various utility functions
 
-
 const CSRF_HEADER = "X-CSRFToken";
 const AUTH_HEADER = "WWW-Authenticate";
+
+// utility function for sending GET request with Authentication header
+export function getAuthenticated(url, token)
+{
+    return fetch(url,
+        {
+            headers: {
+                AUTH_HEADER: "Token " + token
+            }
+        });
+}
 
 // utility function for sending a POST request as form-data
 export function postFormData(url, data, extOpts = {})
@@ -48,7 +58,14 @@ export function postJSONWithToken(url, data, token, extHeaders = {}, extOpts = {
 {
     return postJSON(url, data,
         {
-            "WWW-Authenticate": "Token " + token,
+            [AUTH_HEADER]: "Token " + token,
             ...extHeaders
         }, extOpts);
+}
+
+export function postJSONFullAuth(url, data, token, csrf) {
+    return postJSONWithToken(url, data, token,
+        {
+            [CSRF_HEADER]: csrf
+        });
 }
