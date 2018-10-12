@@ -3,7 +3,6 @@ import LogInForm from './LogInForm';
 import ToDoList from './ToDoList';
 import Header from './Header';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { readCookie } from '../cookies';
 import { connect } from 'react-redux';
 import { changeCSRF } from "../actions";
@@ -11,28 +10,19 @@ import { changeCSRF } from "../actions";
 const CSRF_TOKEN_ID = "csrftoken";
 
 // function defining how to map actions to properties of the component
-const mapDispatchToProps = (dispatch) =>
-{
-    return {
-        changeCSRF: csrf => { return dispatch(changeCSRF(csrf)); }
-    };
+const mapDispatchToProps = {
+    changeCSRF: changeCSRF
 }
 
-function mapStateToProps() {
-    return state => {
-        return { username: state.user.username };
+function mapStateToProps(state) {
+    return {
+        username: state.user.username
     }
 }
 
 // class defining the container component for the entire To Do List application
 class RRApp extends Component
 {
-    // is the mystery solved?
-    constructor(props)
-    {
-        super(props);
-    }
-
     // when the application first starts, nab the CSRF token from the cookie
     componentDidMount()
     {

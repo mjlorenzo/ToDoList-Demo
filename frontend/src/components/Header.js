@@ -3,20 +3,17 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { logout } from '../actions';
 
-function mapStateToProps() {
-    return state => {
-        return {
-            username: state.user.username,
-            csrfToken: state.csrfToken,
-            authToken: state.user.authToken
-        };
+function mapStateToProps(state) {
+    return {
+        username: state.user.username,
+        csrfToken: state.csrfToken,
+        authToken: state.user.authToken
     };
+
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        logout: (authToken, csrfToken) => dispatch(logout(authToken, csrfToken))
-    }
+const mapDispatchToProps = {
+    logout: logout
 }
 
 // This component will display a simple header with a title and username/logout button if applicable
@@ -41,7 +38,7 @@ class RRHeader extends Component
     {
         let userHeading;
 
-        if (this.props.username !== "") {
+        if (this.props.username.length !== 0) {
             userHeading = (
                 <span className='userHeading'>
                     <span>{this.props.username}</span>

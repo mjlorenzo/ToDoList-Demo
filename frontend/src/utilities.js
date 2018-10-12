@@ -1,7 +1,11 @@
+import { readCookie } from "./cookies";
+import { changeCSRF } from './actions';
+
 // file to hold various utility functions
 
 const CSRF_HEADER = "X-CSRFToken";
 const AUTH_HEADER = "WWW-Authenticate";
+const CSRF_TOKEN_ID = "csrftoken";
 
 // utility function for sending GET request with Authentication header
 export function getAuthenticated(url, token)
@@ -26,15 +30,27 @@ export function postFormData(url, data, extOpts = {})
 }
 
 // utility function for posting data with a CSRF token
-export function postFormDataCSRF(url, data, token)
+export function postFormDataCSRF(url, data, csrf, extHeaders = {}, extOpts = {})
 {
     return postFormData(url, data,
         {
             headers: {
-                [CSRF_HEADER]: token
-            }
+                [CSRF_HEADER]: csrf,
+                ...extHeaders
+            },
+            ...extOpts
         });
 }
+
+// utility function for posting form data with full authentication
+export function postFormDataFullAuth(url, data, token, csrf)
+{
+    return postFormDataCSRF(url, data, csrf,
+        {
+            [AUTH_HEADER]: "Token " + token
+        });
+}
+
 
 // utility function for sending a POST request with JSON encoded data
 export function postJSON(url, data, extHeaders = {}, extOpts = {})
@@ -68,4 +84,9 @@ export function postJSONFullAuth(url, data, token, csrf) {
         {
             [CSRF_HEADER]: csrf
         });
+}
+
+export function updateCSRF(dispatch) {
+    var csrf = readCookie(CSRF_TOKEN_ID);
+    dispatch(changeCSRF(csrf));
 }

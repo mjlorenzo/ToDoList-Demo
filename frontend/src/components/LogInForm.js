@@ -19,11 +19,8 @@ function mapStateToProps()
 }
 
 // map relevant action creators to properties
-function mapDispatchToProps(dispatch)
-{
-    return { 
-            login: (formData, csrfToken) => { return dispatch(login(formData, csrfToken)); } 
-    }
+const mapDispatchToProps = {
+    login: login
 }
 
 // describes a form used to log a user in
