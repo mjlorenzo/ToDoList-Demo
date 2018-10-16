@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
+from django.views.decorators.csrf import ensure_csrf_cookie
 
-
+@ensure_csrf_cookie
 def index(request):
-    return render(request, "static/index.html")
-
+    return render(request, "layout.html")
