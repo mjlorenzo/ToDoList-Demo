@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { ListItem } from './ListItem';
+import ListItem from './ListItem';
 import { fetchTodos } from '../actions';
 import React from "react";
 import ReactDOM from "react-dom";
@@ -8,7 +8,7 @@ import AddTodoForm from './AddTodoForm';
 
 // make sure we can ask Redux to fetch our list of todos
 const mapDispatchToProps = {
-    fetchTodos: fetchTodos
+    fetchTodos: fetchTodos,
 }
 
 // make sure the authentication token and todo list are available to the component
@@ -37,7 +37,7 @@ class RRToDoList extends Component
                 <ul>
                 {this.props.todos.map(
                     (todo) => {
-                        return (<ListItem key={todo.id} desc={todo.desc} complete={todo.complete} created={todo.created} />);
+                        return (<ListItem key={todo.id} id={todo.id} desc={todo.desc} complete={todo.complete} created={todo.created} />);
                     }
                 )}
                 </ul>

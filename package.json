@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "babel": "^6.23.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",

@@ -8,7 +8,6 @@ const initialState = {
         username: "",
         authToken: ""
     },
-    csrfToken: "",
     loginError: ""
 }
 
@@ -34,12 +33,6 @@ export function baseReducer(state = initialState, action)
                 ...state,
                 user: action.user
             }
-        // handler for changing the CSRF token
-        case ActionTypes.CHANGE_CSRF:
-            return {
-                ...state,
-                csrfToken: action.csrfToken
-            }
         case ActionTypes.LOGIN_ERROR:
             return {
                 ...state,
@@ -51,6 +44,54 @@ export function baseReducer(state = initialState, action)
                 ...state,
                 todos: action.todos
             }
+        // handler for successful deletion of a todo
+        // things get more interesting here.. but not much
+        case ActionTypes.DEL_TODO:
+            // the ID of each todo is not mapped to its array index but rather its database
+            // primary key (possible security issue?), so we need to find the proper array index
+            var index = state.todos.findIndex(todo => todo.id === action.id);
+            // findIndex() returns -1 if the item does not exist so we test if the returned index
+            // is greater than that
+            // if so, we generate a new array composed of new arrays representing the values on either
+            // side of the now deleted value
+            // otherwise, we just keep the original
+            // [QUESTION]: If the index doesn't exist, is it best practice to throw an error?
+            var newTodos = index > -1 ? [
+                    ...state.todos.slice(0, index),
+                    ...state.todos.slice(index + 1)
+                ] : state.todos;
+            // now we can return our new state object
+            return {
+                ...state,
+                todos: newTodos
+            };
+        // handler for toggling a todo between complete and not
+        // since the entire state is immutable, we'll copy the old array and flip the 'complete' field
+        // at the index of the targeted todo
+        case ActionTypes.TOGGLE_TODO:
+            // find the index of the targeted todo
+            var index = state.todos.findIndex(todo => todo.id === action.id);
+
+            // construct a new array or return the old one
+            var newTodos;
+            if (index > -1) {
+                // the index is valid, so copy the old array
+                newTodos = state.todos.slice();
+                // flip the complete flag
+                // [QUESTION]: since this array contains objects, technically the new array contains
+                //             references to existing state objects. Does flipping this field
+                //             instead of replacing the object break the immutable principle?
+                newTodos[index].complete = !state.todos[index].complete;
+            }
+            else {
+                newTodos = state.todos;
+            }
+
+            // return the completed state
+            return {
+                ...state,
+                todos: newTodos
+            };
         default:
             return state;
     }

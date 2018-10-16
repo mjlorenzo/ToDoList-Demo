@@ -6,7 +6,6 @@ import { logout } from '../actions';
 function mapStateToProps(state) {
     return {
         username: state.user.username,
-        csrfToken: state.csrfToken,
         authToken: state.user.authToken
     };
 
@@ -30,7 +29,7 @@ class RRHeader extends Component
     // define the click handler
     logoutClick()
     {
-        this.props.logout(this.props.authToken, this.props.csrfToken);
+        this.props.logout(this.props.authToken);
     }
 
     // define render() behavior
