@@ -1,5 +1,6 @@
-import Actions from './../actions';
-import { ActionTypes } from './../constants/action_types';
+import Todo from '../classes/Todo';
+import SortFuncs from '../constants/sort_functions';
+import ActionTypes from '../constants/action_types';
 
 // define the intial state of the application as an empty set of todos, and an empty user
 const initialState = {
@@ -8,7 +9,14 @@ const initialState = {
         username: "",
         authToken: ""
     },
-    loginError: ""
+    loginError: "",
+    currentSort: SortFuncs.time.descending
+}
+
+// utility function to create a new sorted todos array using a sort function
+function createSortedTodos(todos, sortFunc) {
+    // slice creates a copy of the original, sort modifies the new array, return the new array
+    return todos.slice().sort(sortFunc);
 }
 
 // defines the base reducer for the store
@@ -23,8 +31,10 @@ export function baseReducer(state = initialState, action)
                 ...state,
                 todos: [
                     ...state.todos,
-                    action.todo
-                ]
+                    new Todo(action.todo)
+                // the last line sorts the new todo array in place before it becomes finalized as
+                // the store
+                ].sort(state.currentSort)
             }
         // handler for changing the current user
         case ActionTypes.CHANGE_USER:
@@ -42,7 +52,7 @@ export function baseReducer(state = initialState, action)
         case ActionTypes.LOAD_TODOS_SUCCESS:
             return {
                 ...state,
-                todos: action.todos
+                todos: action.todos.map(todo => new Todo(todo)).sort(state.currentSort)
             }
         // handler for successful deletion of a todo
         // things get more interesting here.. but not much
@@ -90,6 +100,13 @@ export function baseReducer(state = initialState, action)
             // return the completed state
             return {
                 ...state,
+                todos: newTodos
+            };
+        case ActionTypes.CHANGE_SORT:
+            let newTodos = createSortedTodos(state.todos, action.sort);
+            return {
+                ...state,
+                currentSort: action.sort,
                 todos: newTodos
             };
         default:

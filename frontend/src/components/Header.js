@@ -40,7 +40,7 @@ class RRHeader extends Component
         if (this.props.username.length !== 0) {
             userHeading = (
                 <span className='userHeading'>
-                    <span>{this.props.username}</span>
+                    <span marginRight="5px">{this.props.username}</span>
                     <button onClick={this.logoutClick}>Logout</button>
                 </span>
             );

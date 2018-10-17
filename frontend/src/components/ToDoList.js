@@ -5,6 +5,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import AddTodoForm from './AddTodoForm';
+import SortFuncs from '../constants/sort_functions';
+import SortLink from "./SortLink";
 
 // make sure we can ask Redux to fetch our list of todos
 const mapDispatchToProps = {
@@ -34,13 +36,19 @@ class RRToDoList extends Component
         // properties
         return (
             <div>
-                <ul>
-                {this.props.todos.map(
-                    (todo) => {
-                        return (<ListItem key={todo.id} id={todo.id} desc={todo.desc} complete={todo.complete} created={todo.created} />);
-                    }
-                )}
-                </ul>
+                <div className='todoContainer'>
+                    <div className='tableHeader'>
+                        <div className='tableCell'>#</div>
+                        <div className='tableCell'>Description</div>
+                        <SortLink className='tableCell' sorts={SortFuncs.time} text="Created" />
+                        <div className='tableCell'></div>
+                    </div>
+                    {this.props.todos.map(
+                        (todo, index) => {
+                            return (<ListItem index={index + 1} key={todo.id} id={todo.id} desc={todo.desc} complete={todo.complete} created={todo.createdString()} />);
+                        }
+                    )}
+                </div>
                 <AddTodoForm />
             </div>
         );

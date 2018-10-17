@@ -48,12 +48,12 @@ export class RRListItem extends Component
             textDecorationLine: this.props.complete ? "line-through" : "none"
         }
         return (
-            <li>
-                <div>
-                    <span onClick={this.textClick} style={style}>{this.props.desc}</span>
-                    <button onClick={this.deleteClick}>Delete</button>
-                </div>
-            </li>
+            <div className='tableRow'>
+                <div className='tableCell'>{this.props.index}</div>
+                <div onClick={this.textClick} className='tableCell' style={style}>{this.props.desc}</div>
+                <div className='tableCell'>{this.props.created}</div>
+                <button className='tableCell' onClick={this.deleteClick}>Delete</button>
+            </div>
         )
     }
 }

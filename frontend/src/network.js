@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// file to hold various utility functions
+// utility functions that handle making network requests
 
 const CSRF_HEADER = "X-CSRFToken";
 const AUTH_HEADER = "WWW-Authenticate";

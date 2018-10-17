@@ -1,4 +1,4 @@
-import { ActionTypes } from './constants/action_types';
+import ActionTypes from './constants/action_types';
 import { getAuthenticated, postAuthenticated, post, 
     deleteAuthenticated, patchAuthenticated } from './network';
 
@@ -45,6 +45,13 @@ function togTodo(id) {
         type: ActionTypes.TOGGLE_TODO,
         id: id
     };
+}
+
+export function changeSort(sort) {
+    return {
+        type: ActionTypes.CHANGE_SORT,
+        sort: sort
+    }
 }
 
 // the following action creators are 'thunks'
