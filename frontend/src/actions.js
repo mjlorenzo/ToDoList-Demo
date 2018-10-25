@@ -4,7 +4,10 @@ import { getAuthenticated, postAuthenticated, post,
 
 const LOGIN_URL = "/rest-auth/login/";
 const LOGOUT_URL = "/rest-auth/logout/";
+const REGISTER_URL = "/rest-auth/registration/";
 const TODOS_URL = "/todos/";
+const ORDER_PARAM = "ordering";
+const PAGE_PARAM = "page";
 
 // define a collection of action creators
 // these functions usually just return a uniformly formatted action object
@@ -51,7 +54,30 @@ export function changeSort(sort) {
     return {
         type: ActionTypes.CHANGE_SORT,
         sort: sort
+    };
+}
+
+function setError(error) {
+    return {
+        type: ActionTypes.SET_ERROR,
+        error: error
+    };
+}
+
+function clearError() {
+    return { type: ActionTypes.CLEAR_ERROR };
+}
+
+export function changePage(page) {
+    return {
+        type: ActionTypes.CHANGE_PAGE,
+        page: page
     }
+}
+
+// utility function to create a standard error message
+function stdError(msg, statusText) {
+    return msg + " (" + statusText + ")";
 }
 
 // the following action creators are 'thunks'
@@ -63,12 +89,15 @@ export function changeSort(sort) {
 // accepts the login credentials
 export function login(formData) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         post(LOGIN_URL, formData).then( (response) => {
             dispatch(changeUser(formData.get("username"), response.data.key));
         }).catch(
-            // [TODO]: Handle this a lot better 
-            (error) => console.log(error)); 
-    };
+            // [TODO]: I should be doing client side validation before sending network requests...
+            (error) => dispatch(setError(error.response.data["non_field_errors"] ||
+                        error.response.data["password"])));
+    }
 }
 
 // action creator to fetch a list of todos for the logged in user represented by its authToken
@@ -76,11 +105,13 @@ export function login(formData) {
 // if there is an error, it will throw an exception and catch it
 export function fetchTodos(authToken) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         return getAuthenticated(TODOS_URL, authToken).then((response) => {
             dispatch(loadTodosSuccess(response.data));
         }).catch(
             // [TODO]: Handle this a lot better
-            (error) => console.log(error));
+            (error) => dispatch(setError(stdError("Unable to load to-do list", error.response.statusText))));
     }
 }
 
@@ -89,11 +120,13 @@ export function fetchTodos(authToken) {
 // if there is an error, it will throw an exception and catch it
 export function logout(authToken) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         return postAuthenticated(LOGOUT_URL, null, authToken).then(response => {
             dispatch(changeUser("", ""));
         }).catch(
             // [TODO]: Handle this a lot better
-            error => console.log(error));
+            error => dispatch(setError(stdError("Unable to logout", error.response.statusText))));
     }
 }
 
@@ -102,11 +135,13 @@ export function logout(authToken) {
 // if there is an error, it will throw an exception and catch it
 export function submitTodo(todo, authToken) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         return postAuthenticated(TODOS_URL, todo, authToken).then(response => {
             dispatch(addTodo(response.data));
         }).catch(
             // [TODO]: Handle this a lot better
-            error => console.log(error));
+            error => dispatch(setError(stdError("Unable to add to-do", error.response.statusText))));
     }
 }
 
@@ -116,6 +151,8 @@ export function submitTodo(todo, authToken) {
 // if there is an error, it will throw an exception and catch it
 export function deleteTodo(id, authToken) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         // generate the appropriate URL
         var deleteURL = TODOS_URL + id + "/";
         return deleteAuthenticated(deleteURL, authToken).then((response) => {
@@ -123,7 +160,7 @@ export function deleteTodo(id, authToken) {
             dispatch(delTodo(id));
         }).catch(
             // [TODO]: Handle this a lot better
-            error => console.log(error));
+            dispatch(setError(stdError("Unable to delete to-do", error.response.statusText))));
     }
 }
 
@@ -133,6 +170,8 @@ export function deleteTodo(id, authToken) {
 // will be persisted to the resource but for our purposes we just need to toggle the 'complete' field
 export function toggleTodo(id, data, authToken) {
     return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
         // generate the appropriate URL
         var patchURL = TODOS_URL + id + "/";
         return patchAuthenticated(patchURL, data, authToken).then((response) => {
@@ -140,6 +179,20 @@ export function toggleTodo(id, data, authToken) {
             dispatch(togTodo(id));
         }).catch(
             // [TODO]: Handle this a lot better
-            error => console.log(error));
+            error => dispatch(setError(stdError("Unable to update to-do", error.response.statusText))));
+    }
+}
+
+// action creator to register a new user with the system by sending an HTTP POST request to
+// /rest-auth/registration/
+export function register(data) {
+    return (dispatch) => {
+        // clear any errors first
+        dispatch(clearError());
+        return post(REGISTER_URL, data).then(response => {
+            dispatch(changeUser(data.get("username"), response.data.key));
+        }).catch(
+            // [TODO]: Handle this a lot better
+            error => dispatch(setError(stdError("Unable to register", error.response.statusText))));
     }
 }

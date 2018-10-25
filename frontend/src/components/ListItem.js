@@ -50,9 +50,9 @@ export class RRListItem extends Component
         return (
             <div className='tableRow'>
                 <div className='tableCell'>{this.props.index}</div>
-                <div onClick={this.textClick} className='tableCell' style={style}>{this.props.desc}</div>
+                <div onClick={this.textClick} className='tableCell clickable' style={style}>{this.props.desc}</div>
                 <div className='tableCell'>{this.props.created}</div>
-                <button className='tableCell' onClick={this.deleteClick}>Delete</button>
+                <button className='tableCell clickable' onClick={this.deleteClick}>Delete</button>
             </div>
         )
     }

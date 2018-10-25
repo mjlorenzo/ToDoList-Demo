@@ -27,6 +27,9 @@
 div.main {
     width: 70%;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 div.todoContainer {
@@ -36,6 +39,10 @@ div.todoContainer {
 
 div.tableRow {
     display: table-row;
+}
+
+div.tableRow:hover {
+    border: solid 3px lightgray
 }
 
 div.tableHeader {
@@ -50,4 +57,24 @@ div.tableHeader > div {
 div.tableCell {
     display: table-cell;
     padding: 1em;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+form#ADDTODO_FORM {
+    display: flex;
+    justify-content: center;
+}
+
+.entryForm {
+    margin: .5em auto 10em auto;
+    border: solid black .2em;
+    padding: .5em;
+}
+
+.clickable {
+    cursor: pointer;
 }

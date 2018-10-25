@@ -52,8 +52,8 @@ export default class Todo
             amOrPm = "PM";
         }
 
-        dateStr = dateStr + hrs + ":" + mins + ":" + secs + amOrPm +
-                    " " + month + "/" + day + "/" + year;
+        dateStr = dateStr + hrs + ":" + (mins < 10 ?  "0" : "") + mins + ":" + (secs < 10 ?  "0" : "")
+                    + secs + amOrPm + " " + month + "/" + day + "/" + year;
         return dateStr;
     }
 }

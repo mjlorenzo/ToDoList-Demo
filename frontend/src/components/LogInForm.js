@@ -2,10 +2,10 @@ import { Component } from 'react';
 import React from 'react';
 import { connect } from 'react-redux';
 import { login } from '../actions';
+import { REGISTER_VIEW } from './App';
 
 // define some constants
 const USER_INPUT_ID = "username";
-const EMAIL_INPUT_ID = "email";
 const PASS_INPUT_ID = "password";
 const FORM_ID = "loginform";
 
@@ -20,11 +20,11 @@ class RRLogInForm extends Component
     constructor(props)
     {
         // call Component's constructor
-        // [QUESTION]: Why is it necessary here?
         super(props);
 
         // bind the submit handler to the current instance
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onViewClick = this.onViewClick.bind(this);
     }
 
     // event handler for clicking the Log In button
@@ -40,23 +40,25 @@ class RRLogInForm extends Component
         this.props.login(formData);
     }
 
+    onViewClick(event)
+    {
+        this.props.onViewClick(REGISTER_VIEW);
+    }
+
     // render the login form
     render()
     {
         return (
-            <form id={FORM_ID} onSubmit={this.handleSubmit}>
+            <form className="entryForm" id={FORM_ID} onSubmit={this.handleSubmit}>
                 <div>
                     <span>Username:</span>
                     <input type='text' id={USER_INPUT_ID} name={USER_INPUT_ID}></input>
                 </div>
                 <div>
-                    <span>Email:</span>
-                    <input type='text' id={EMAIL_INPUT_ID} name={EMAIL_INPUT_ID}></input>
-                </div>
-                <div>
                     <span>Password:</span>
-                    <input type='text' id={PASS_INPUT_ID} name={PASS_INPUT_ID}></input>
+                    <input type='password' id={PASS_INPUT_ID} name={PASS_INPUT_ID}></input>
                 </div>
+                <span onClick={this.onViewClick}>Register</span>
                 <button type='submit'>Log In</button>
             </form>
         );
