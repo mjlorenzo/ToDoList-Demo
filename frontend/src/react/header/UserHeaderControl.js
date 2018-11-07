@@ -5,7 +5,6 @@ import { userNameSelector, authTokenSelector } from '../../redux/selectors';
 
 function mapStateToProps(state) {
     return {
-        // [TODO]: Make these selectors
         username: userNameSelector(state),
         authToken: authTokenSelector(state)
     };

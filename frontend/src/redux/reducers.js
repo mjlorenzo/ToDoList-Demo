@@ -35,27 +35,10 @@ export function baseReducer(state = initialState, action)
                 addedTodo
             ];
 
-            /* [TODO]: Figure out what the hell to do with this
-            // check if the new todo is on the current page, if not we should switch to that page
-            let index = newTodos.length - 1;
-            let newPage = state.page.current;
-            let firstIndex = (newPage - 1) * state.page.itemsPerPage;
-            let lastIndex = (state.page.current * state.page.itemsPerPage) - 1
-            // if the new index isn't in the current page, change the page
-
-            if (firstIndex > index || lastIndex < index) {
-                newPage = Math.floor(index / state.page.itemsPer) + 1;
-            }*/
-
             // returns a new object with the appropriate fields changed to new updated objects
             return {
                 ...state,
                 todos: newTodos,
-                /*
-                page: {
-                    current: newPageNum,
-                    itemsPerPage: state.page.itemsPerPage
-                }*/
             };
         }
         // handler for changing the current user

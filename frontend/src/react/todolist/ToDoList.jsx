@@ -1,7 +1,6 @@
 import { Component } from "react";
 import React from "react";
 import SortFuncs from '../../redux/sorts';
-import Page from '../../classes/Page';
 import AddTodoControl from './AddTodoControl';
 import ListItemControl from './ListItemControl';
 import SortLinkControl from './SortLinkControl';
