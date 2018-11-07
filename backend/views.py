@@ -2,6 +2,7 @@ from .models import ToDoItem
 from rest_framework import viewsets
 from .permissions import OwnerOrNothing
 from .serializers import ToDoItemSerializer
+from rest_framework.filters import OrderingFilter
 
 # This view inherits from ModelViewSet, meaning it already supports basic CRUD functions
 class ToDoViewSet(viewsets.ModelViewSet):

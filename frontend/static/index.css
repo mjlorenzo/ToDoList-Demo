@@ -2,10 +2,11 @@
     width: 100%;
     height: 15%;
     background-color: azure;
-    border-style: none none solid;
-    border-bottom: black 10px;
-    padding: 10% 2% 2%;
-    margin-bottom: 2%;
+    border-bottom: solid black 5px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 5px;
 }
 
 .headerTitle {
@@ -19,8 +20,10 @@
     font-size: 20px;
     font-style: bold;
     font-family: 'Segoe UI';
-    margin-right: 10px;
-    float: right;
+}
+
+.userHeading > span {
+    padding: 0 5px;
 }
 
 /* *************** Main Content Formatting *******************************************************/
@@ -28,4 +31,64 @@
 div.main {
     width: 70%;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.todoContainer {
+    display: table;
+    width: 100%;
+}
+
+div.tableRow {
+    display: table-row;
+}
+
+div.tableRow:hover {
+    border: solid 3px lightgray
+}
+
+div.tableHeader {
+    display: table-header-group
+}
+
+div.tableHeader > div {
+    font-weight: bold;
+    font-size: large;
+}
+
+div.tableCell {
+    display: table-cell;
+    padding: 1em;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}
+
+.entryForm {
+    margin: .5em auto 10em auto;
+    border: solid black .2em;
+    padding: .5em;
+}
+
+span.viewLink:hover {
+    cursor: pointer;
+    text-decoration-line: underline;
+}
+
+.pageControl {
+    margin-bottom: 5px;
+    float: right;
+}
+
+.pageControl > span {
+    padding: 0 5px;
+}
+
+.addTodoForm {
+    display: flex;
+    justify-content: center;
 }

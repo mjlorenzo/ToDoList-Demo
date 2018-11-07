@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { baseReducer } from './reducers/index';
+import { createStore, applyMiddleware } from 'redux';
+import { baseReducer } from './redux/reducers';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import App from './components/App';
+import AppContainer from './react/AppContainer';
 import thunk from 'redux-thunk';
-import { applyMiddleware } from 'redux';
 
 // create the store from our base reducer
 const store = createStore(baseReducer, applyMiddleware(thunk));
@@ -16,7 +14,7 @@ const store = createStore(baseReducer, applyMiddleware(thunk));
 // aware of the existence of the Redux store
 render(
     <Provider store={store}>
-        <App />
+        <AppContainer />
     </Provider>,
     document.getElementById("root")
 );

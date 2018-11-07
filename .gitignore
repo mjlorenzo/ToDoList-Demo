@@ -1,0 +1,28 @@
+# File to exclude files and directories from the repository
+
+# JavaScript dependencies
+/node_modules
+
+# VisualStudio Code folder
+/.vscode
+
+# VisualStudio Code workspace settings
+*.code-workspace
+
+# Python cache directory
+_pycache_
+
+# Webpack configuration
+webpack.config.js
+
+# Database migration folders
+/migrations
+
+# Django init script file
+__init__.py
+
+# Databases
+*.sqlite3
+
+# Babel configuration
+.babelrc
