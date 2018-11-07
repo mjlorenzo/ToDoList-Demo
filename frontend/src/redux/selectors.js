@@ -17,6 +17,8 @@ export const totalTodosSelector = state => state.todos.length;
 export const currentPageSelector = state => state.page.current;
 // items per page selector
 export const itemsPerPageSelector = state => state.page.itemsPerPage;
+// error selector
+export const errorSelector = state => state.error;
 
 // this selector returns a calculated last page number for the todo list
 export const lastPageSelector = createSelector(

@@ -5,7 +5,7 @@ import { authTokenSelector } from '../../redux/selectors';
 
 const mapDispatchToProps = {
     submitHandler: submitTodo,
-    setError: setError
+    errorHandler: setError
 }
 
 function mapStateToProps(state) {

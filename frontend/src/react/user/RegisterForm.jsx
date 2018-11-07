@@ -33,6 +33,21 @@ class RegisterForm extends PureComponent
     {
         event.preventDefault();
 
+        // basic validation, make sure no field is blank and pass1 matches pass2
+        if (this.state.username === "") {
+            this.props.errorHandler("The username field cannot be blank");
+            return;
+        }
+        if (this.state.password1 === "" || this.state.password2 === "") {
+            this.props.errorHandler("Neither password field may be blank");
+            return;
+        }
+        if (this.state.password1 !== this.state.password2) {
+            this.props.errorHandler("The provided passwords do not match");
+            return;
+        }
+
+        // otherwise, fire away
         this.props.submitHandler(this.state);
     }
 
@@ -87,8 +102,8 @@ class RegisterForm extends PureComponent
                            onChange={this.handlePass2ChangeOrBlur}
                            onBlur={this.handlePass2ChangeOrBlur}/>
                 </div>
-                <span onClick={this.onViewClick}>Login</span>
-                <button type='submit'>Register</button>
+                <span className='viewLink' onClick={this.onViewClick}>Login</span>
+                <button style={{float: "right"}} type='submit'>Register</button>
             </form>
         )
     }

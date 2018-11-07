@@ -32,6 +32,7 @@ export class ListItem extends Component
     // override the render function
     render()
     {
+        // style the text as strike-through if the todo is complete
         let style = {
             textDecorationLine: this.props.complete ? "line-through" : "none"
         }

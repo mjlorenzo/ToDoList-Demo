@@ -26,7 +26,12 @@ class AddTodoForm extends Component
         // halt the browser
         event.preventDefault();
 
-        // [TODO]: validate input
+        // basic validation, make sure the description isn't an empty string
+        if (this.state.desc === "") {
+            this.props.errorHandler("The todo description cannot be blank");
+            return;
+        }
+
         // create a new Todo (the ID value is meaningless to the API)
         var newTodo = new Todo(0, this.state.desc, false);
 
@@ -45,11 +50,11 @@ class AddTodoForm extends Component
     {
         return (
             <div>
-                <form>
+                <form className='addTodoForm'>
                     <input name='desc' 
                            type='text' 
-                           size='50' 
-                           maxLength='50'
+                           size='75' 
+                           maxLength='100'
                            onChange={this.handleChangeOrBlur}
                            onBlur={this.handleChangeOrBlur}/>
                     <button type='submit' onClick={this.handleSubmit}>Add ToDo</button>

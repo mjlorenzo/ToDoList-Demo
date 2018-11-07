@@ -3,6 +3,8 @@ import SortLink from './SortLink';
 import { connect } from 'react-redux';
 import { currentSortSelector } from '../../redux/selectors';
 
+// redux bindings for the SortLink
+
 const mapDispatchToProps = {
     changeSort: changeSort
 }

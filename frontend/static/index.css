@@ -22,6 +22,10 @@
     font-family: 'Segoe UI';
 }
 
+.userHeading > span {
+    padding: 0 5px;
+}
+
 /* *************** Main Content Formatting *******************************************************/
 
 div.main {
@@ -64,17 +68,27 @@ div.tableCell {
     text-align: center;
 }
 
-form#ADDTODO_FORM {
-    display: flex;
-    justify-content: center;
-}
-
 .entryForm {
     margin: .5em auto 10em auto;
     border: solid black .2em;
     padding: .5em;
 }
 
-.clickable {
+span.viewLink:hover {
     cursor: pointer;
+    text-decoration-line: underline;
+}
+
+.pageControl {
+    margin-bottom: 5px;
+    float: right;
+}
+
+.pageControl > span {
+    padding: 0 5px;
+}
+
+.addTodoForm {
+    display: flex;
+    justify-content: center;
 }

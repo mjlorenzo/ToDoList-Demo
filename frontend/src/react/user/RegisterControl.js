@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import RegisterForm from './RegisterForm';
-import { register } from '../../redux/actions';
+import { register, setError } from '../../redux/actions';
 
 const mapDispatchToProps = {
-    submitHandler: register
+    submitHandler: register,
+    errorHandler: setError
 }
 
 const RegisterControl = connect(null, mapDispatchToProps)(RegisterForm);

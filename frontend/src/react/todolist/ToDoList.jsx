@@ -1,39 +1,20 @@
-import { Component } from "react";
-import React from "react";
+import React, { Component } from "react";
 import SortFuncs from '../../redux/sorts';
 import AddTodoControl from './AddTodoControl';
 import ListItemControl from './ListItemControl';
 import SortLinkControl from './SortLinkControl';
 import PropTypes from 'prop-types';
 import Todo from '../../classes/Todo';
+import PageControl from "./PageControl";
 
 
 // React component that will maintain the to do list
 class ToDoList extends Component
 {
-    // bind our event handlers
-    constructor(props)
-    {
-        super(props);
-
-        this.nextClick = this.nextClick.bind(this);
-        this.prevClick = this.prevClick.bind(this);
-    }
     // when the component mounts, fetch the todo list
     componentDidMount()
     {
         this.props.fetchTodos(this.props.authToken);
-    }
-
-    // handlers for clicking the next and previous page buttons
-    nextClick(event)
-    {
-        this.props.changePage(this.props.currentPage + 1);
-    }
-
-    prevClick(event)
-    {
-        this.props.changePage(this.props.currentPage - 1);
     }
 
     render()
@@ -56,9 +37,7 @@ class ToDoList extends Component
                         }
                     )}
                 </div>
-                <button disabled={this.props.currentPage <= 1} onClick={this.prevClick}>Prev</button>
-                <span>{this.props.currentPage + " of " + this.props.lastPage}</span>
-                <button disabled={this.props.currentPage >= this.props.lastPage}onClick={this.nextClick}>Next</button>
+                <PageControl />
                 <AddTodoControl />
             </div>
         );
@@ -67,12 +46,8 @@ class ToDoList extends Component
 
 ToDoList.propTypes = {
     fetchTodos: PropTypes.func.isRequired,
-    changePage: PropTypes.func.isRequired,
     visibleTodos: PropTypes.arrayOf(PropTypes.instanceOf(Todo)).isRequired,
-    authToken: PropTypes.string.isRequired,
-    currentPage: PropTypes.number.isRequired,
-    lastPage: PropTypes.number.isRequired,
-    firstIndex: PropTypes.number.isRequired
+    authToken: PropTypes.string.isRequired
 }
 
 export default ToDoList;

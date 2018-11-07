@@ -31,8 +31,13 @@ class App extends Component
     onViewClick(view)
     {
         // basic validation to ensure a valid view was specified
-        if (view !== LOGIN_VIEW && view != REGISTER_VIEW)
-            throw new Error("Invalid view specified");
+        if (view !== LOGIN_VIEW && view != REGISTER_VIEW) {
+            this.props.errorHandler("Invalid view specified");
+            return;
+        }
+
+        // clear any current errors
+        this.props.clearError();
         // calling this.setState() within this function will trigger a rerender
         this.setState({
             view: view
@@ -67,7 +72,9 @@ class App extends Component
 
 App.propTypes = {
     username: PropTypes.string,
-    error: PropTypes.string
+    error: PropTypes.string,
+    errorHandler: PropTypes.func.isRequired,
+    clearError: PropTypes.func.isRequired
 }
 
 export default App;

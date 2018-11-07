@@ -49,11 +49,6 @@ export function baseReducer(state = initialState, action)
                 ...initialState,
                 user: action.user
             }
-        case ActionTypes.LOGIN_ERROR:
-            return {
-                ...state,
-                loginError: action.error
-            }
         // handler for successful retrieval of todos
         case ActionTypes.LOAD_TODOS_SUCCESS: {
             let newTodos = action.todos.map(todo => new Todo(todo));

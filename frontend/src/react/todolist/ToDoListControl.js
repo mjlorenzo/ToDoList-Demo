@@ -7,8 +7,7 @@ import { authTokenSelector, currentPageSelector,
 
 // make sure we can ask Redux to fetch our list of todos
 const mapDispatchToProps = {
-    fetchTodos: fetchTodos,
-    changePage: changePage
+    fetchTodos: fetchTodos
 };
 
 // make sure the authentication token and todo list are available to the component
@@ -16,9 +15,7 @@ function mapStateToProps(state) {
     return {
         authToken: authTokenSelector(state),
         visibleTodos: visibleTodosSelector(state),
-        currentPage: currentPageSelector(state),
-        firstIndex: pageFirstIndexSelector(state),
-        lastPage: lastPageSelector(state)
+        firstIndex: pageFirstIndexSelector(state)
     };
 }
 

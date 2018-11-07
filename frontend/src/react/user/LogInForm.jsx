@@ -31,6 +31,16 @@ class LogInForm extends PureComponent
         // stop the browser from taking action
         event.preventDefault();
 
+        // basic validation, make sure neither field is blank
+        if (this.state.username === "") {
+            this.props.errorHandler("The username field cannot be blank");
+            return;
+        }
+        if (this.state.password === "") {
+            this.props.errorHandler("The password field cannot be blank");
+            return;
+        }
+        
         // perform the network request through redux-thunk
         this.props.submitHandler(this.state);
     }
@@ -74,8 +84,8 @@ class LogInForm extends PureComponent
                            onChange={this.handlePassChangeOrBlur}
                            onBlur={this.handlePassChangeOrBlur}/>
                 </div>
-                <span onClick={this.onViewClick}>Register</span>
-                <button type='submit'>Log In</button>
+                <span className='viewLink' onClick={this.onViewClick} >Register</span>
+                <button style={{float: "right"}} type='submit'>Log In</button>
             </form>
         );
     }

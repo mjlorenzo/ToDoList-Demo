@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { ListItem } from './ListItem';
 import { authTokenSelector } from '../../redux/selectors';
 
+// this file contains redux bindings for each todo item
+
 const mapDispatchToProps = {
     deleteTodo: deleteTodo,
     toggleTodo: toggleTodo
