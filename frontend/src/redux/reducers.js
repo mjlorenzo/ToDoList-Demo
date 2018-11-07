@@ -1,15 +1,16 @@
 import Todo from '../classes/Todo';
-import Sorts from '../constants/sorts';
-import Page from '../classes/Page';
-import ActionTypes from '../constants/action_types';
+import Sorts from './sorts';
+import ActionTypes from './action_types';
 
 const ITEMS_PER_PG = 10;
 
 // define the intial state of the application as an empty set of todos, and an empty user
 const initialState = {
     todos: [],
-    visibleTodos: [],
-    page: new Page(1, ITEMS_PER_PG),
+    page: {
+        current: 1,
+        itemsPerPage: ITEMS_PER_PG
+    },
     user: {
         username: "",
         authToken: ""
@@ -18,16 +19,7 @@ const initialState = {
     currentSort: Sorts.time.descending
 }
 
-// utility function to create a new sorted todos array using a sort function
-function createSortedTodos(todos, sortFunc) {
-    // slice creates a copy of the original, sort modifies the new array, return the new array
-    return todos.slice().sort(sortFunc);
-}
-
-// utility function to obtain a correct visibleTodos array
-function createVisibleTodos(todos, page) {
-    return todos.slice(page.firstIndex, page.secondIndex + 1);
-}
+// utility functions to calculate first/last indices for pages
 
 // defines the base reducer for the store
 export function baseReducer(state = initialState, action)
@@ -36,33 +28,35 @@ export function baseReducer(state = initialState, action)
     {
         // handler for adding a todo item
         case ActionTypes.ADD_TODO: {
-            // create a new sorted array with the added todo
+            // create a new array with the added todo
             let addedTodo = new Todo(action.todo);
             let newTodos = [
                 ...state.todos,
                 addedTodo
-            ].sort(state.currentSort);
+            ];
 
+            /* [TODO]: Figure out what the hell to do with this
             // check if the new todo is on the current page, if not we should switch to that page
-            // find the new index of the inserted Todo
-            let index = newTodos.findIndex(todo => todo === addedTodo);
-            let newPage = state.page;
+            let index = newTodos.length - 1;
+            let newPage = state.page.current;
+            let firstIndex = (newPage - 1) * state.page.itemsPerPage;
+            let lastIndex = (state.page.current * state.page.itemsPerPage) - 1
             // if the new index isn't in the current page, change the page
-            if (state.page.firstIndex > index || state.page.secondIndex < index) {
-                let newPageNum = Math.floor(index / state.page.itemsPer) + 1;
-                newPage = new Page(newPageNum, state.page.itemsPer);
-            }
 
-            // create the new visible todos array
-            let newVisibleTodos = createVisibleTodos(newTodos, newPage);
+            if (firstIndex > index || lastIndex < index) {
+                newPage = Math.floor(index / state.page.itemsPer) + 1;
+            }*/
 
             // returns a new object with the appropriate fields changed to new updated objects
             return {
                 ...state,
                 todos: newTodos,
-                visibleTodos: newVisibleTodos,
-                page: newPage
-            }
+                /*
+                page: {
+                    current: newPageNum,
+                    itemsPerPage: state.page.itemsPerPage
+                }*/
+            };
         }
         // handler for changing the current user
         case ActionTypes.CHANGE_USER:
@@ -79,12 +73,10 @@ export function baseReducer(state = initialState, action)
             }
         // handler for successful retrieval of todos
         case ActionTypes.LOAD_TODOS_SUCCESS: {
-            let newTodos = action.todos.map(todo => new Todo(todo)).sort(state.currentSort);
-            let newVisibleTodos = createVisibleTodos(newTodos, state.page);
+            let newTodos = action.todos.map(todo => new Todo(todo));
             return {
                 ...state,
                 todos: newTodos,
-                visibleTodos: newVisibleTodos
             }
         }
         // handler for successful deletion of a todo
@@ -103,12 +95,10 @@ export function baseReducer(state = initialState, action)
                     ...state.todos.slice(0, index),
                     ...state.todos.slice(index + 1)
                 ] : state.todos;
-            let newVisibleTodos = createVisibleTodos(newTodos, state.page);
             // now we can return our new state object
             return {
                 ...state,
                 todos: newTodos,
-                visibleTodos: newVisibleTodos
             };
         }
         // handler for toggling a todo between complete and not
@@ -119,55 +109,47 @@ export function baseReducer(state = initialState, action)
             let index = state.todos.findIndex(todo => todo.id === action.id);
 
             // construct a new array or return the old one
-            let newTodos;
+            let newTodos = state.todos;
             if (index > -1) {
                 // the index is valid, so copy the old array
                 newTodos = state.todos.slice();
-                // flip the complete flag
-                // [QUESTION]: since this array contains objects, technically the new array contains
-                //             references to existing state objects. Does flipping this field
-                //             instead of replacing the object break the immutable principle?
-                newTodos[index].complete = !state.todos[index].complete;
-            }
-            else {
-                newTodos = state.todos;
+                // create a new Todo with an inverted complete field
+                let newTodo = new Todo(state.todos[index]);
+                newTodo.complete = !newTodo.complete;
+                // store it in the same index
+                newTodos[index] = newTodo;
             }
 
-            let newVisibleTodos = createVisibleTodos(newTodos, state.page);
             // return the completed state
             return {
                 ...state,
-                todos: newTodos,
-                visibleTodos: newVisibleTodos
+                todos: newTodos
             };
         }
         case ActionTypes.CHANGE_SORT: {
-            let newTodos = createSortedTodos(state.todos, action.sort);
-            let newVisibleTodos = createVisibleTodos(newTodos, state.page);
             return {
                 ...state,
                 currentSort: action.sort,
-                todos: newTodos,
-                visibleTodos: newVisibleTodos
             };
         }
         case ActionTypes.SET_ERROR:
             return {
                 ...state,
                 error: action.error
-            }
+            };
         case ActionTypes.CLEAR_ERROR:
             return {
                 ...state,
                 error: ""
-            }
+            };
         case ActionTypes.CHANGE_PAGE: {
-            let newVisibleTodos = createVisibleTodos(state.todos, action.page)
             return {
                 ...state,
-                page: action.page,
-                visibleTodos: newVisibleTodos
-            }
+                page: {
+                    current: action.page,
+                    itemsPerPage: state.page.itemsPerPage
+                }
+            };
         }
         default:
             return state;

@@ -1,22 +1,10 @@
 import { Component } from "react";
 import React from "react";
-import { connect } from 'react-redux';
-import { deleteTodo, toggleTodo } from '../actions';
-
-const mapDispatchToProps = {
-    deleteTodo: deleteTodo,
-    toggleTodo: toggleTodo
-}
-
-function mapStateToProps(state) {
-    return {
-        authToken: state.user.authToken
-    }
-}
+import PropTypes from 'prop-types';
 
 // class representing each todo item in the list
 // the user will be able to interact with this component to perform actions on its particular todo
-export class RRListItem extends Component
+export class ListItem extends Component
 {
     // define constructor to bind event handlers to the current instance
     constructor(props)
@@ -58,5 +46,14 @@ export class RRListItem extends Component
     }
 }
 
-var ListItem = connect(mapStateToProps, mapDispatchToProps)(RRListItem);
+ListItem.propTypes = {
+    authToken: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+    desc: PropTypes.string.isRequired,
+    created: PropTypes.string.isRequired,
+    complete: PropTypes.bool.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
+    toggleTodo: PropTypes.func.isRequired
+};
+
 export default ListItem;

@@ -1,21 +1,9 @@
-import React from 'react';
-import { Component } from 'react';
-import { changeSort } from '../actions';
-import { connect } from 'react-redux';
-
-const mapDispatchToProps = {
-    changeSort: changeSort
-}
-
-function mapStateToProps(state) {
-    return {
-        currentSort: state.currentSort
-    };
-}
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 // this component issues a CHANGE_SORT action when clicked
 
-class RRSortLink extends Component
+class SortLink extends PureComponent
 {
     constructor(props)
     {
@@ -51,5 +39,14 @@ class RRSortLink extends Component
     }
 }
 
-var SortLink = connect(mapStateToProps, mapDispatchToProps)(RRSortLink);
+SortLink.propTypes = {
+    sorts: PropTypes.shape({
+        ascending: PropTypes.func.isRequired,
+        descending: PropTypes.func.isRequired
+    }),
+    changeSort: PropTypes.func.isRequired,
+    text: PropTypes.string.isRequired,
+    currentSort: PropTypes.func.isRequired
+};
+
 export default SortLink;

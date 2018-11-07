@@ -18,9 +18,11 @@ export default class Todo
         }
         else {
             // otherwise construct an object from the arguments
+            // note: since the ID is the database primary key, it will be ignored on submission
             this.id = objOrID;
             this.desc = desc;
             this.complete = complete;
+            // note: the API will ignore this submitted value also
             this.created = new Date();
         }
 

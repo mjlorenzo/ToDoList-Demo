@@ -1,6 +1,6 @@
-import ActionTypes from './constants/action_types';
+import ActionTypes from './action_types';
 import { getAuthenticated, postAuthenticated, post, 
-    deleteAuthenticated, patchAuthenticated } from './network';
+    deleteAuthenticated, patchAuthenticated } from '../util/network';
 
 const LOGIN_URL = "/rest-auth/login/";
 const LOGOUT_URL = "/rest-auth/logout/";
@@ -57,7 +57,7 @@ export function changeSort(sort) {
     };
 }
 
-function setError(error) {
+export function setError(error) {
     return {
         type: ActionTypes.SET_ERROR,
         error: error
@@ -87,12 +87,12 @@ function stdError(msg, statusText) {
 // action creator to perform a login request with the network and dispatch actions according
 // to the response
 // accepts the login credentials
-export function login(formData) {
+export function login(userData) {
     return (dispatch) => {
         // clear any errors first
         dispatch(clearError());
-        post(LOGIN_URL, formData).then( (response) => {
-            dispatch(changeUser(formData.get("username"), response.data.key));
+        post(LOGIN_URL, userData).then( (response) => {
+            dispatch(changeUser(userData.username, response.data.key));
         }).catch(
             // [TODO]: I should be doing client side validation before sending network requests...
             (error) => dispatch(setError(error.response.data["non_field_errors"] ||
@@ -190,7 +190,7 @@ export function register(data) {
         // clear any errors first
         dispatch(clearError());
         return post(REGISTER_URL, data).then(response => {
-            dispatch(changeUser(data.get("username"), response.data.key));
+            dispatch(changeUser(data.username, response.data.key));
         }).catch(
             // [TODO]: Handle this a lot better
             error => dispatch(setError(stdError("Unable to register", error.response.statusText))));

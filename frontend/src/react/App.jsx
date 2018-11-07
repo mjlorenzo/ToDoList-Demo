@@ -1,23 +1,15 @@
-import { Component } from "react";
-import LogInForm from './LogInForm';
-import ToDoList from './ToDoList';
-import RegisterForm from './RegisterForm';
-import Header from './Header';
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import LogInControl from './user/LogInControl';
+import ToDoListControl from './todolist/ToDoListControl';
+import RegisterControl from './user/RegisterControl';
+import HeaderContainer from './header/HeaderContainer';
+import PropTypes from 'prop-types';
 
 export const LOGIN_VIEW = "login";
 export const REGISTER_VIEW = "register";
 
-function mapStateToProps(state) {
-    return {
-        username: state.user.username,
-        error: state.error
-    }
-}
-
 // class defining the container component for the entire To Do List application
-class RRApp extends Component
+class App extends Component
 {
     constructor(props)
     {
@@ -53,15 +45,15 @@ class RRApp extends Component
         // determine which component to render
         let component;
         if (this.props.username.length !== 0)
-            component = <ToDoList />;
+            component = <ToDoListControl />;
         else if (this.state.view === REGISTER_VIEW)
-            component = <RegisterForm onViewClick={this.onViewClick}/>;
+            component = <RegisterControl onViewClick={this.onViewClick}/>;
         else
-            component = <LogInForm onViewClick={this.onViewClick}/>;
+            component = <LogInControl onViewClick={this.onViewClick}/>;
 
         return (
             <span>
-                <Header />
+                <HeaderContainer />
                 <div className="main">
                     {this.props.error != "" && <div className="error">
                         {"ERROR: " + this.props.error}
@@ -73,7 +65,9 @@ class RRApp extends Component
     }
 }
 
-// Fire off connect() to tie the component to Redux but wrap in 'withRouter' to ensure the components
-// are properly updated
-const App = connect(mapStateToProps)(RRApp);
+App.propTypes = {
+    username: PropTypes.string,
+    error: PropTypes.string
+}
+
 export default App;
